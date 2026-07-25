@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { tripAPI } from '../api';
+import { tripAPI, API_BASE_URL } from '../api';
 import Navbar from '../components/navbar';
 import './viewtrips.css';
 
@@ -163,7 +163,7 @@ const TripCard = ({ trip, onView, onDelete, status }) => {
             {coverImage && (
                 <img
                     className="trip-card-cover"
-                    src={`http://localhost:3000/uploads/${coverImage.filename}`}
+                    src={`${API_BASE_URL}/uploads/${coverImage.filename}`}
                     alt={trip.title}
                 />
             )}

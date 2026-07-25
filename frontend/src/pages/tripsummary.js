@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { tripAPI } from '../api';
+import { tripAPI, API_BASE_URL } from '../api';
 import Navbar from '../components/navbar';
 import './tripsummary.css';
 
@@ -138,7 +138,7 @@ const TripSummary = () => {
                                             {dest.images.map((img) => (
                                                 <img
                                                     key={img.id}
-                                                    src={`http://localhost:3000/uploads/${img.filename}`}
+                                                    src={`${API_BASE_URL}/uploads/${img.filename}`}
                                                     alt={dest.name}
                                                 />
                                             ))}

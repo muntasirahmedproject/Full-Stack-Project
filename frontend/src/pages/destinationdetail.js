@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { destinationAPI, activityAPI, categoryAPI, imageAPI } from '../api';
+import { destinationAPI, activityAPI, categoryAPI, imageAPI, API_BASE_URL } from '../api';
 import Navbar from '../components/navbar';
 import './destinationdetail.css';
 
@@ -265,7 +265,7 @@ const DestinationDetail = () => {
                         <div className="images-grid">
                             {images.map((img) => (
                                 <div key={img.id} className="image-thumb">
-                                    <img src={`http://localhost:3000/uploads/${img.filename}`} alt="Destination" />
+                                    <img src={`${API_BASE_URL}/uploads/${img.filename}`} alt="Destination" />
                                     <button className="btn-delete-image" onClick={() => handleDeleteImage(img.id)}>×</button>
                                 </div>
                             ))}
@@ -442,7 +442,7 @@ const DestinationDetail = () => {
                                                     <img
                                                         key={img.id}
                                                         className="activity-thumb"
-                                                        src={`http://localhost:3000/uploads/${img.filename}`}
+                                                        src={`${API_BASE_URL}/uploads/${img.filename}`}
                                                         alt={act.name}
                                                     />
                                                 ))}

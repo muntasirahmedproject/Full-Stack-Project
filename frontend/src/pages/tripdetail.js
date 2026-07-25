@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { tripAPI, destinationAPI, imageAPI } from '../api';
+import { tripAPI, destinationAPI, imageAPI, API_BASE_URL } from '../api';
 import Navbar from '../components/navbar';
 import './tripdetail.css';
 
@@ -208,7 +208,7 @@ const TripDetail = () => {
                         <div className="cover-image-wrapper">
                             <img
                                 className="cover-image"
-                                src={`http://localhost:3000/uploads/${coverImages[0].filename}`}
+                                src={`${API_BASE_URL}/uploads/${coverImages[0].filename}`}
                                 alt="Trip cover"
                             />
                             <button className="btn-delete-cover" onClick={() => handleDeleteCover(coverImages[0].id)}>

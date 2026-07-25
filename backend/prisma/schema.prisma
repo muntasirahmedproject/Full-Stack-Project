@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int     @id @default(autoincrement())
+  name      String
+  email     String  @unique
+  password  String
+  role      String  @default("user")
+  isDisabled Boolean @default(false)
+  createdAt DateTime @default(now())
+
+  trips Trip[]
+}
+
+model Trip {
+  id          Int     @id @default(autoincrement())
+  userId      Int
+  user        User    @relation(fields: [userId], references: [id])
+  
+  title       String
+  description String?
+  notes       String?
+  currency    String  @default("USD")
+  startDate   DateTime
+  endDate     DateTime
+  createdAt   DateTime @default(now())
+
+  destinations Destination[]
+  images       Image[]
+}
+
+model Destination {
+  id        Int     @id @default(autoincrement())
+  tripId    Int
+  trip      Trip    @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  
+  name      String
+  notes     String?
+  orderIndex Int
+  visited   Boolean @default(false)
+  websiteUrl String?
+  mapUrl    String?
+  createdAt DateTime @default(now())
+
+  activities Activity[]
+  images     Image[]
+}
+
+model Activity {
+  id            Int     @id @default(autoincrement())
+  destinationId Int
+  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  
+  categoryId    Int
+  category      Category @relation(fields: [categoryId], references: [id])
+  
+  name          String
+  notes         String?
+  dateTime      DateTime
+  budgetPlanned Float   @default(0)
+  budgetActual  Float?
+  visited       Boolean @default(false)
+  rating        Int?
+  websiteUrl    String?
+  mapUrl        String?
+  createdAt     DateTime @default(now())
+
+  images Image[]
+}
+
+model Category {
+  id   Int     @id @default(autoincrement())
+  name String  @unique
+
+  activities Activity[]
+}
+
+model Image {
+  id        Int     @id @default(autoincrement())
+  filename  String
+  uploadedAt DateTime @default(now())
+
+  tripId        Int?
+  trip          Trip? @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  
+  destinationId Int?
+  destination   Destination? @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  
+  activityId    Int?
+  activity      Activity? @relation(fields: [activityId], references: [id], onDelete: Cascade)
+}

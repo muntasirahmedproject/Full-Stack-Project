@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# Environment variables (contains secrets - never commit)
+.env
+backend/.env
+
+# Uploaded images (user content, not source code)
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Build output
+frontend/build/
+frontend/dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+
+# AI tool / IDE internal config
+.agents/
+.claude/
+.windsurf/

@@ -267,6 +267,29 @@
     background: rgba(231, 76, 60, 0.9);
 }
 
+.btn-download-image {
+    position: absolute;
+    top: 6px;
+    right: 38px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    font-size: 13px;
+    cursor: pointer;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.btn-download-image:hover {
+    background: rgba(102, 126, 234, 0.9);
+}
+
 .no-images {
     color: #999;
     text-align: center;
@@ -294,11 +317,52 @@
     flex-wrap: wrap;
 }
 
+.activity-thumb-wrapper {
+    position: relative;
+    width: 50px;
+    height: 50px;
+}
+
 .activity-thumb {
     width: 50px;
     height: 50px;
     object-fit: cover;
     border-radius: 6px;
+}
+
+.btn-download-activity-image,
+.btn-delete-activity-image {
+    position: absolute;
+    top: -6px;
+    background: rgba(0, 0, 0, 0.65);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 11px;
+    cursor: pointer;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.btn-download-activity-image {
+    right: 16px;
+}
+
+.btn-delete-activity-image {
+    right: -6px;
+}
+
+.btn-download-activity-image:hover {
+    background: rgba(102, 126, 234, 0.9);
+}
+
+.btn-delete-activity-image:hover {
+    background: rgba(231, 76, 60, 0.9);
 }
 
 .btn-upload-small {

@@ -184,6 +184,23 @@ const DestinationDetail = () => {
         }
     };
 
+    const handleDownloadImage = async (filename) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/uploads/${filename}`);
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(blobUrl);
+        } catch (err) {
+            setError('Failed to download image');
+        }
+    };
+
     const handleActivityImageUpload = async (e, activityId) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -266,7 +283,8 @@ const DestinationDetail = () => {
                             {images.map((img) => (
                                 <div key={img.id} className="image-thumb">
                                     <img src={`${API_BASE_URL}/uploads/${img.filename}`} alt="Destination" />
-                                    <button className="btn-delete-image" onClick={() => handleDeleteImage(img.id)}>×</button>
+                                    <button className="btn-download-image" title="Download" onClick={() => handleDownloadImage(img.filename)}>⬇</button>
+                                    <button className="btn-delete-image" title="Delete" onClick={() => handleDeleteImage(img.id)}>×</button>
                                 </div>
                             ))}
                         </div>
@@ -439,12 +457,27 @@ const DestinationDetail = () => {
 
                                             <div className="activity-images-row">
                                                 {act.images && act.images.map((img) => (
-                                                    <img
-                                                        key={img.id}
-                                                        className="activity-thumb"
-                                                        src={`${API_BASE_URL}/uploads/${img.filename}`}
-                                                        alt={act.name}
-                                                    />
+                                                    <div key={img.id} className="activity-thumb-wrapper">
+                                                        <img
+                                                            className="activity-thumb"
+                                                            src={`${API_BASE_URL}/uploads/${img.filename}`}
+                                                            alt={act.name}
+                                                        />
+                                                        <button
+                                                            className="btn-download-activity-image"
+                                                            title="Download"
+                                                            onClick={() => handleDownloadImage(img.filename)}
+                                                        >
+                                                            ⬇
+                                                        </button>
+                                                        <button
+                                                            className="btn-delete-activity-image"
+                                                            title="Delete"
+                                                            onClick={() => handleDeleteImage(img.id)}
+                                                        >
+                                                            ×
+                                                        </button>
+                                                    </div>
                                                 ))}
                                                 <label className="btn-upload-small">
                                                     {uploadingActivityId === act.id ? '...' : '+ Photo'}

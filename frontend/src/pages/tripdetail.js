@@ -87,6 +87,23 @@ const TripDetail = () => {
         }
     };
 
+    const handleDownloadImage = async (filename) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/uploads/${filename}`);
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(blobUrl);
+        } catch (err) {
+            setError('Failed to download image');
+        }
+    };
+
     const handleToggleDestVisited = async (destId, currentVisited) => {
         try {
             await destinationAPI.updateDestination(destId, { visited: !currentVisited });
@@ -211,6 +228,9 @@ const TripDetail = () => {
                                 src={`${API_BASE_URL}/uploads/${coverImages[0].filename}`}
                                 alt="Trip cover"
                             />
+                            <button className="btn-download-cover" onClick={() => handleDownloadImage(coverImages[0].filename)}>
+                                Download
+                            </button>
                             <button className="btn-delete-cover" onClick={() => handleDeleteCover(coverImages[0].id)}>
                                 Remove Cover
                             </button>

@@ -1,40 +1,8 @@
-import express from 'express';
 import dotenv from 'dotenv';
-import cors from 'cors';
-import path from 'path';
-import authRoutes from './authRoutes.js';
-import tripRoutes from './tripRoutes.js';
-import destinationRoutes from './destinationRoutes.js';
-import activityRoutes from './activityRoutes.js';
-import categoryRoutes from './categoryRoutes.js';
-import adminRoutes from './adminRoutes.js';
-import imageRoutes from './imageRoutes.js';
-
 dotenv.config();
+import app from './app.js';
 
-const app = express();
 const PORT = process.env.PORT || 3000;
-
-app.use(cors({
-    origin: [
-        'http://localhost:3000',
-        'https://trip-planner-frontend-r9py.onrender.com'
-    ]
-}));
-app.use(express.json());
-app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
-
-app.get('/', (req, res) => {
-    res.json({ message: 'TripPlanner API is running' });
-});
-
-app.use('/auth', authRoutes);
-app.use('/trips', tripRoutes);
-app.use('/destinations', destinationRoutes);
-app.use('/activities', activityRoutes);
-app.use('/categories', categoryRoutes);
-app.use('/admin', adminRoutes);
-app.use('/images', imageRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

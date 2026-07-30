@@ -39,6 +39,7 @@ const DestinationDetail = () => {
     const [editTime, setEditTime] = useState('');
     const [editCategory, setEditCategory] = useState('');
     const [editBudget, setEditBudget] = useState('');
+    const [editBudgetActual, setEditBudgetActual] = useState('');
 
     useEffect(() => {
         fetchData();
@@ -87,6 +88,7 @@ const DestinationDetail = () => {
         setEditTime(dt.toTimeString().slice(0, 5));
         setEditCategory(act.categoryId);
         setEditBudget(act.budgetPlanned);
+        setEditBudgetActual(act.budgetActual || '');
     };
 
     const cancelEditActivity = () => {
@@ -100,7 +102,8 @@ const DestinationDetail = () => {
                 name: editName,
                 dateTime,
                 categoryId: editCategory,
-                budgetPlanned: editBudget
+                budgetPlanned: editBudget,
+                budgetActual: editBudgetActual
             });
             setEditingActivityId(null);
             fetchData();
@@ -394,6 +397,13 @@ const DestinationDetail = () => {
                                                     placeholder="Budget"
                                                     step="0.01"
                                                 />
+                                                <input
+                                                    type="number"
+                                                    value={editBudgetActual}
+                                                    onChange={(e) => setEditBudgetActual(e.target.value)}
+                                                    placeholder={`Actual Spent (e.g. 42 ${currencySymbol})`}
+                                                    step="0.01"
+                                                />
                                             </div>
                                             <div className="edit-actions">
                                                 <button type="button" className="btn-cancel-edit" onClick={cancelEditActivity}>
@@ -413,6 +423,9 @@ const DestinationDetail = () => {
                                                         {new Date(act.dateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                     </p>
                                                     <p className="activity-budget">Budget: {currencySymbol}{act.budgetPlanned}</p>
+                                                    {act.visited && (
+                                                        <p className="activity-budget">Actual Spent: {currencySymbol}{act.budgetActual || 0}</p>
+                                                    )}
                                                 </div>
                                                 <div className="activity-card-right">
                                                     {isInFuture(act.dateTime) ? (

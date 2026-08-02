@@ -196,7 +196,7 @@
     flex-wrap: wrap;
 }
 
-..summary-photos img {
+.summary-photos img {
     width: 70px !important;
     height: 70px !important;
     object-fit: cover !important;

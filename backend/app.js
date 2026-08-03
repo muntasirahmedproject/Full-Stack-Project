@@ -15,6 +15,7 @@ app.use(cors({
     origin: [
         'http://localhost:3000',
         'http://localhost:3001',
+        'http://localhost:4643',
         'http://localhost:8080',
         'https://trip-planner-frontend-r9py.onrender.com'
     ]

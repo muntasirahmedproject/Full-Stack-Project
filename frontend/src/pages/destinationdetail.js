@@ -70,6 +70,13 @@ const DestinationDetail = () => {
         return new Date(dateTime) > new Date();
     };
 
+    const isWithinTripDates = (dateString, trip) => {
+        if (!trip) return true;
+        const start = new Date(trip.startDate).toISOString().split('T')[0];
+        const end = new Date(trip.endDate).toISOString().split('T')[0];
+        return dateString >= start && dateString <= end;
+    };
+
     const handleDeleteActivity = async (activityId) => {
         if (!window.confirm('Delete this activity? This cannot be undone.')) return;
         try {
@@ -96,6 +103,13 @@ const DestinationDetail = () => {
     };
 
     const handleUpdateActivity = async (activityId) => {
+        if (!isWithinTripDates(editDate, destination.trip)) {
+            const start = new Date(destination.trip.startDate).toLocaleDateString();
+            const end = new Date(destination.trip.endDate).toLocaleDateString();
+            setError(`Activity date must be within the trip's dates (${start} - ${end})`);
+            return;
+        }
+
         try {
             const dateTime = `${editDate}T${editTime || '00:00'}`;
             await activityAPI.updateActivity(activityId, {
@@ -106,9 +120,10 @@ const DestinationDetail = () => {
                 budgetActual: editBudgetActual
             });
             setEditingActivityId(null);
+            setError('');
             fetchData();
         } catch (err) {
-            setError('Failed to update activity');
+            setError(err.response?.data?.error || 'Failed to update activity');
         }
     };
 
@@ -137,6 +152,13 @@ const DestinationDetail = () => {
             return;
         }
 
+        if (!isWithinTripDates(actDate, destination.trip)) {
+            const start = new Date(destination.trip.startDate).toLocaleDateString();
+            const end = new Date(destination.trip.endDate).toLocaleDateString();
+            setError(`Activity date must be within the trip's dates (${start} - ${end})`);
+            return;
+        }
+
         try {
             const dateTime = actTime ? `${actDate}T${actTime}` : `${actDate}T00:00`;
             await activityAPI.createActivity(
@@ -155,7 +177,7 @@ const DestinationDetail = () => {
             setError('');
             fetchData();
         } catch (err) {
-            setError('Failed to add activity');
+            setError(err.response?.data?.error || 'Failed to add activity');
         }
     };
 
@@ -327,6 +349,8 @@ const DestinationDetail = () => {
                                     type="date"
                                     value={actDate}
                                     onChange={(e) => setActDate(e.target.value)}
+                                    min={destination.trip ? new Date(destination.trip.startDate).toISOString().split('T')[0] : undefined}
+                                    max={destination.trip ? new Date(destination.trip.endDate).toISOString().split('T')[0] : undefined}
                                 />
                                 <input
                                     type="time"
@@ -382,6 +406,8 @@ const DestinationDetail = () => {
                                                     type="date"
                                                     value={editDate}
                                                     onChange={(e) => setEditDate(e.target.value)}
+                                                    min={destination.trip ? new Date(destination.trip.startDate).toISOString().split('T')[0] : undefined}
+                                                    max={destination.trip ? new Date(destination.trip.endDate).toISOString().split('T')[0] : undefined}
                                                 />
                                                 <input
                                                     type="time"

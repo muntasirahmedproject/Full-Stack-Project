@@ -5,6 +5,13 @@ import { verifyToken } from './middleware.js';
 const router = express.Router();
 const prisma = new PrismaClient();
 
+const isWithinTripRange = (activityDateTime, tripStart, tripEnd) => {
+    const actDateOnly = new Date(activityDateTime).toISOString().split('T')[0];
+    const startDateOnly = new Date(tripStart).toISOString().split('T')[0];
+    const endDateOnly = new Date(tripEnd).toISOString().split('T')[0];
+    return actDateOnly >= startDateOnly && actDateOnly <= endDateOnly;
+};
+
 // Get all activities for a destination
 router.get('/destination/:destinationId', verifyToken, async (req, res) => {
     try {
@@ -53,6 +60,12 @@ router.post('/', verifyToken, async (req, res) => {
 
         if (destination.trip.userId !== req.userId) {
             return res.status(403).json({ error: 'Unauthorized' });
+        }
+
+        if (!isWithinTripRange(dateTime, destination.trip.startDate, destination.trip.endDate)) {
+            const start = new Date(destination.trip.startDate).toLocaleDateString();
+            const end = new Date(destination.trip.endDate).toLocaleDateString();
+            return res.status(400).json({ error: `Activity date must be within the trip's dates (${start} - ${end})` });
         }
 
         const activity = await prisma.activity.create({
@@ -110,6 +123,15 @@ router.put('/:activityId', verifyToken, async (req, res) => {
 
         if (activity.destination.trip.userId !== req.userId) {
             return res.status(403).json({ error: 'Unauthorized' });
+        }
+
+        if (dateTime) {
+            const trip = activity.destination.trip;
+            if (!isWithinTripRange(dateTime, trip.startDate, trip.endDate)) {
+                const start = new Date(trip.startDate).toLocaleDateString();
+                const end = new Date(trip.endDate).toLocaleDateString();
+                return res.status(400).json({ error: `Activity date must be within the trip's dates (${start} - ${end})` });
+            }
         }
 
         const updated = await prisma.activity.update({

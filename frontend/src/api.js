@@ -58,8 +58,8 @@ export const activityAPI = {
     getActivities: (destinationId) =>
         api.get(`/activities/destination/${destinationId}`),
     getActivity: (activityId) => api.get(`/activities/${activityId}`),
-    createActivity: (destinationId, categoryId, name, dateTime, budgetPlanned) =>
-        api.post('/activities', { destinationId, categoryId, name, dateTime, budgetPlanned }),
+    createActivity: (destinationId, categoryId, name, dateTime, budgetPlanned, websiteUrl) =>
+        api.post('/activities', { destinationId, categoryId, name, dateTime, budgetPlanned, websiteUrl }),
     updateActivity: (activityId, data) =>
         api.put(`/activities/${activityId}`, data),
     deleteActivity: (activityId) => api.delete(`/activities/${activityId}`)

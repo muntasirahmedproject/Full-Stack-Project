@@ -43,7 +43,7 @@ router.get('/destination/:destinationId', verifyToken, async (req, res) => {
 // Create an activity
 router.post('/', verifyToken, async (req, res) => {
     try {
-        const { destinationId, categoryId, name, dateTime, budgetPlanned } = req.body;
+        const { destinationId, categoryId, name, dateTime, budgetPlanned, websiteUrl } = req.body;
 
         if (!destinationId || !categoryId || !name || !dateTime) {
             return res.status(400).json({ error: 'destinationId, categoryId, name, and dateTime are required' });
@@ -74,7 +74,8 @@ router.post('/', verifyToken, async (req, res) => {
                 categoryId: parseInt(categoryId),
                 name,
                 dateTime: new Date(dateTime),
-                budgetPlanned: parseFloat(budgetPlanned) || 0
+                budgetPlanned: parseFloat(budgetPlanned) || 0,
+                websiteUrl: websiteUrl || undefined
             },
             include: { category: true }
         });

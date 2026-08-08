@@ -40,6 +40,7 @@ const DestinationDetail = () => {
     const [editCategory, setEditCategory] = useState('');
     const [editBudget, setEditBudget] = useState('');
     const [editBudgetActual, setEditBudgetActual] = useState('');
+    const [editLink, setEditLink] = useState('');
 
     useEffect(() => {
         fetchData();
@@ -77,6 +78,12 @@ const DestinationDetail = () => {
         return dateString >= start && dateString <= end;
     };
 
+    const formatLink = (url) => {
+        if (!url) return '';
+        if (url.indexOf('http') === 0) return url;
+        return 'https://' + url;
+    };
+
     const handleDeleteActivity = async (activityId) => {
         if (!window.confirm('Delete this activity? This cannot be undone.')) return;
         try {
@@ -96,6 +103,7 @@ const DestinationDetail = () => {
         setEditCategory(act.categoryId);
         setEditBudget(act.budgetPlanned);
         setEditBudgetActual(act.budgetActual || '');
+        setEditLink(act.websiteUrl || '');
     };
 
     const cancelEditActivity = () => {
@@ -117,7 +125,8 @@ const DestinationDetail = () => {
                 dateTime,
                 categoryId: editCategory,
                 budgetPlanned: editBudget,
-                budgetActual: editBudgetActual
+                budgetActual: editBudgetActual,
+                websiteUrl: editLink
             });
             setEditingActivityId(null);
             setError('');
@@ -166,7 +175,8 @@ const DestinationDetail = () => {
                 actCategory,
                 actName,
                 dateTime,
-                actBudget || 0
+                actBudget || 0,
+                actLink
             );
             setActName('');
             setActDate('');
@@ -431,6 +441,14 @@ const DestinationDetail = () => {
                                                     step="0.01"
                                                 />
                                             </div>
+                                            <div className="form-row">
+                                                <input
+                                                    type="text"
+                                                    value={editLink}
+                                                    onChange={(e) => setEditLink(e.target.value)}
+                                                    placeholder="Link (optional)"
+                                                />
+                                            </div>
                                             <div className="edit-actions">
                                                 <button type="button" className="btn-cancel-edit" onClick={cancelEditActivity}>
                                                     Cancel
@@ -451,6 +469,16 @@ const DestinationDetail = () => {
                                                     <p className="activity-budget">Budget: {currencySymbol}{act.budgetPlanned}</p>
                                                     {act.visited && (
                                                         <p className="activity-budget">Actual Spent: {currencySymbol}{act.budgetActual || 0}</p>
+                                                    )}
+                                                    {act.websiteUrl && (
+                                                        <a
+                                                            href={formatLink(act.websiteUrl)}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="activity-link"
+                                                        >
+                                                            🔗 Visit link
+                                                        </a>
                                                     )}
                                                 </div>
                                                 <div className="activity-card-right">

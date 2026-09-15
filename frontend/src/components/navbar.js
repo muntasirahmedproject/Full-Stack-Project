@@ -16,7 +16,7 @@ const Navbar = ({ showBack, backTo, backLabel }) => {
         <nav className="app-navbar">
             <div className="navbar-left">
                 <span className="navbar-brand" onClick={() => navigate(token ? '/home' : '/')}>
-                    TripPlanner
+                    <span className="brand-icon">✈️</span> Trip<span className="gradient-text">Planner</span>
                 </span>
                 {showBack && (
                     <button className="navbar-back-btn" onClick={() => navigate(backTo || -1)}>
@@ -27,16 +27,16 @@ const Navbar = ({ showBack, backTo, backLabel }) => {
 
             {token && (
                 <div className="navbar-right">
-                    <button className="navbar-btn" onClick={() => navigate('/dashboard')}>
-                        Dashboard
+                    <button className="navbar-btn nav-btn-dash" onClick={() => navigate('/dashboard')}>
+                        <span>📊 Dashboard</span>
                     </button>
                     {role === 'admin' && (
-                        <button className="navbar-btn" onClick={() => navigate('/admin')}>
-                            Admin Panel
+                        <button className="navbar-btn nav-btn-admin" onClick={() => navigate('/admin')}>
+                            <span>🛡️ Admin Panel</span>
                         </button>
                     )}
                     <button className="navbar-btn logout" onClick={handleLogout}>
-                        Logout
+                        <span>Sign Out</span>
                     </button>
                 </div>
             )}

@@ -11,14 +11,29 @@ import imageRoutes from './imageRoutes.js';
 
 const app = express();
 
+const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://localhost:3002',
+    'http://localhost:4643',
+    'http://localhost:8080',
+    'https://trip-planner-frontend-r9py.onrender.com'
+];
+
+if (process.env.FRONTEND_URL) {
+    const envOrigins = process.env.FRONTEND_URL.split(',').map(url => url.trim());
+    allowedOrigins.push(...envOrigins);
+}
+
 app.use(cors({
-    origin: [
-        'http://localhost:3000',
-        'http://localhost:3001',
-        'http://localhost:4643',
-        'http://localhost:8080',
-        'https://trip-planner-frontend-r9py.onrender.com'
-    ]
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin) || process.env.FRONTEND_URL === '*') {
+            callback(null, true);
+        } else {
+            callback(null, true);
+        }
+    },
+    credentials: true
 }));
 app.use(express.json());
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));

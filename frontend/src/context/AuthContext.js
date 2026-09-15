@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
         try {
             const response = await authAPI.register(name, email, password);
             setToken(response.data.token);
-            setRole(response.data.role);
+            setRole(response.data.role?.toLowerCase());
             setUser({ id: response.data.userId });
             return response.data;
         } catch (err) {
@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
         try {
             const response = await authAPI.login(email, password);
             setToken(response.data.token);
-            setRole(response.data.role);
+            setRole(response.data.role?.toLowerCase());
             setUser({ id: response.data.userId });
             return response.data;
         } catch (err) {

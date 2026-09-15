@@ -1,4 +1,7 @@
 import jwt from 'jsonwebtoken';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 export const verifyToken = (req, res, next) => {
     const token = req.headers['authorization'];
@@ -19,9 +22,18 @@ export const verifyToken = (req, res, next) => {
     });
 };
 
-export const verifyAdmin = (req, res, next) => {
-    if (req.userRole !== 'admin') {
-        return res.status(403).json({ error: 'Admin access required' });
+export const verifyAdmin = async (req, res, next) => {
+    try {
+        if (!req.userId) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+        const user = await prisma.user.findUnique({ where: { id: req.userId } });
+        if (!user || user.role?.toLowerCase() !== 'admin') {
+            return res.status(403).json({ error: 'Admin access required' });
+        }
+        req.userRole = user.role;
+        next();
+    } catch (err) {
+        res.status(500).json({ error: 'Admin check failed' });
     }
-    next();
 };

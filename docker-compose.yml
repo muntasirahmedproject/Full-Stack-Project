@@ -17,17 +17,20 @@ services:
     depends_on:
       - db
     environment:
-      DATABASE_URL: postgresql://postgres:dockerpassword@db:5432/trip_planner_docker
-      JWT_SECRET: dockersecret
+      DATABASE_URL: ${DATABASE_URL:-postgresql://postgres:dockerpassword@db:5432/trip_planner_docker}
+      JWT_SECRET: ${JWT_SECRET:-dockersecret}
       PORT: 3000
+      FRONTEND_URL: ${FRONTEND_URL:-*}
     ports:
       - "3001:3000"
+    volumes:
+      - uploads_data:/app/uploads
 
   frontend:
     build:
       context: ./frontend
       args:
-        REACT_APP_API_URL: http://localhost:3001
+        REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:3001}
     restart: always
     depends_on:
       - backend
@@ -36,3 +39,5 @@ services:
 
 volumes:
   postgres_data:
+  uploads_data:
+

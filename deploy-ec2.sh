@@ -44,7 +44,7 @@ docker compose down || true
 docker compose up -d --build
 
 echo "Waiting for PostgreSQL database to initialize..."
-sleep 5
+sleep 12
 
 echo "Applying Prisma database migrations..."
 docker compose exec -T backend npx prisma migrate deploy

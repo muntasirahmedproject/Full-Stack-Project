@@ -1,6 +1,13 @@
 import axios from 'axios';
 
-export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+const getBaseUrl = () => {
+    if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+        return `http://${window.location.hostname}:3001`;
+    }
+    return process.env.REACT_APP_API_URL || 'http://localhost:3000';
+};
+
+export const API_BASE_URL = getBaseUrl();
 
 const api = axios.create({
     baseURL: API_BASE_URL,

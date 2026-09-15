@@ -19,14 +19,12 @@ echo "========================================="
 
 # Create .env if it does not exist
 if [ ! -f .env ]; then
-  DB_PASS=$(openssl rand -hex 12 2>/dev/null || echo "tripplanner_pass_123")
-  JWT_SEC=$(openssl rand -hex 24 2>/dev/null || echo "tripplanner_jwt_secret_456")
   cat <<EOT > .env
 POSTGRES_USER=trip_user
-POSTGRES_PASSWORD=${DB_PASS}
+POSTGRES_PASSWORD=tripplanner_secure_db_pass_2026
 POSTGRES_DB=trip_planner
-DATABASE_URL=postgresql://trip_user:${DB_PASS}@db:5432/trip_planner
-JWT_SECRET=${JWT_SEC}
+DATABASE_URL=postgresql://trip_user:tripplanner_secure_db_pass_2026@db:5432/trip_planner
+JWT_SECRET=tripplanner_jwt_secret_key_2026
 PORT=3000
 FRONTEND_URL=*
 REACT_APP_API_URL=http://${PUBLIC_HOST}:3001
